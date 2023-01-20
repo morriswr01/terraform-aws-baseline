@@ -1,27 +1,17 @@
 # terraform-aws-baseline
 
-## Goal
+Creating this as reference for myself and as a quick getting started repo should I need to quickly setup an AWS account.
 
--   Create infrastructure to host terraform state such that other repositories can be deployed to AWS without having to store terraform state on my local machine
-    -   S3 Bucket
-    -   Dynamo DB table
--   Not a module to start with but can be made into one once initial setup is complete
--   Will only be deployed a single AWS account for now so no environments folder is necessary
+## Setting up terraform with AWS
+
+-   `stateSetup.tf` contains the infrastructure needed to host your terraform state. It is just an s3 bucket to hold the state itself and a DynamoDB table to hold locking information that terraform uses to prevent race conditions that could happen if you tried to change the same infrastructure at the same time from different terraform deplyoments.
+-   Firstly comment out the terraform block at the top of this file.
+-   Run `terraform init`
+-   Run `terraform apply --auto-approve`
+-   Then uncomment the terraform block at the top of this file. Go to S3 an copy the s3 bucket name of the created bucket(should begin with name terraform-state) and put it in the bucket key of this block. You now have a terraform backend. We then need to run the above commands again to inpu
+-   Run `terraform init` again. You will be asked "Do you want to copy the existing state to the new backend?". Type yes to this. This will copy the terraform state that is stored localy in `terraform.tfstate` and pop it in your new s3 bucket.
+-   Your terraform state is now hosted by AWS rather than stored on your local system. Just use the terraform backend block found in `stateSetup.tfstate` in any other terraform you write.
 
 ## Helpful resources
 
-- https://technology.doximity.com/articles/terraform-s3-backend-best-practices
-
-## Other things to figure out
-
-- AWS SSO and temporary credentials
-
-
-## AWS SSO and temporary credentials
-
-- Enable AWS Organisations on the AWS account
-- Navigate to IAM Identity Center (replacement for AWS SSO)
-- Save AWS SSO Start URL
-- Go to Users and create a new user
-- Create Administrators Group and add new user to this group
-- Create new permission set using AWSAdministratorAccess policy a
+-   https://technology.doximity.com/articles/terraform-s3-backend-best-practices
