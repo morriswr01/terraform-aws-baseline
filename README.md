@@ -1,6 +1,7 @@
 # terraform-aws-baseline
 
 Creating this as reference for myself and as a quick getting started repo should I need to quickly setup an AWS account.
+All it does is set up terraform state using s3 and DynamoDB.
 
 ## Setting up terraform with AWS
 
