@@ -21,11 +21,11 @@ terraform {
   }
 }
 
-# S3 State Bucket
 resource "aws_s3_bucket" "terraform_state_bucket" {
   bucket_prefix = "terraform-state"
 }
 
+# Happy just using the AWS managed KMS key here for now but generally better to use a CMK
 resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_bucket_encryption_configuration" {
   bucket = aws_s3_bucket.terraform_state_bucket.id
   rule {
